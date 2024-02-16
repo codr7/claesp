@@ -1,0 +1,6 @@
+* fix decimal support in read-number
+* add vector support
+** add vector-type
+** add read-vector
+* fix emit-lisp for id-form
+** add namespace or use empty package?
