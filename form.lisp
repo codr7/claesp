@@ -6,8 +6,8 @@
 (defstruct (id-form (:include form))
   (name (error "Missing name") :type keyword))
 
-(defun new-id-form (loc name)
-  (make-id-form :location loc :name name))
+(defun new-id-form (location name)
+  (make-id-form :location location :name name))
 
 (defmethod print-object ((f id-form) out)
   (write-string (symbol-name (id-form-name f)) out))
@@ -20,8 +20,8 @@
 (defstruct (literal-form (:include form))
   (value (error "Missing value")))
 
-(defun new-literal-form (loc value)
-  (make-literal-form :location loc :value value))
+(defun new-literal-form (location value)
+  (make-literal-form :location location :value value))
 
 (defmethod print-object ((f literal-form) out)
   (print-object (literal-form-value f) out))
@@ -33,8 +33,8 @@
   (left (error "Missing left"))
   (right (error "Missing right")))
 
-(defun new-pair-form (loc left right)
-  (make-pair-form :location loc :left left :right right))
+(defun new-pair-form (location left right)
+  (make-pair-form :location location :left left :right right))
 
 (defmethod print-object ((f pair-form) out)
   (format out "~a:~a" (pair-form-left f) (pair-form-right f)))

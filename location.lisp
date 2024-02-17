@@ -8,8 +8,8 @@
 (defun new-location (source)
   (make-location :source source))
 
-(defmethod clone ((loc location))
-  (copy-structure loc))
+(defmethod clone ((location location))
+  (copy-structure location))
 
-(defmethod print-object ((loc location) out)
-  (format out "~a@~a:~a" (source loc) (line loc) (column loc)))
+(defmethod print-object ((location location) out)
+  (format out "~a@~a:~a" (source location) (line location) (column location)))
