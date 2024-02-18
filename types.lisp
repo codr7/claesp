@@ -3,12 +3,12 @@
 (defclass meta-type (value-type)
   ())
 
-(defvar meta-type (make-instance 'meta-type :name "Meta"))
-
 (defmethod initialize-instance :after ((self value-type) &rest args)
   (declare (ignore args))
   (let ((name (name self)))
     (bind-id (name self) (new-value (if (string= name "Meta") self meta-type) self))))
+
+(defvar meta-type (make-instance 'meta-type :name "Meta"))
 
 (defclass bit-type (value-type)
   ())
@@ -17,6 +17,12 @@
 
 (defmethod print-value ((type bit-type) value out)
   (write-char (if value #\T #\F) out))
+
+(defvar true (new-value bit-type t))
+(defvar false (new-value bit-type nil))
+
+(bind-id "T" true)
+(bind-id "F" false)
 
 (defclass number-type (value-type)
   ())
@@ -34,7 +40,7 @@
 (defclass vector-type (value-type)
   ())
 
-(defvar vector-type (make-instance 'pair-type :name "Vector"))
+(defvar vector-type (make-instance 'vector-type :name "Vector"))
 
 (defmethod print-value ((type vector-type) value out)
   (write-char #\[ out)

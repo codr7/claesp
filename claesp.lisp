@@ -6,4 +6,4 @@
 
 (define-symbol-macro version 1)
 
-(defvar debug-mode t)
+(defvar debug-mode t)  

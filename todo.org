@@ -1,7 +1,4 @@
-* add vector support
-** add vector-type
-** add read-vector
-* fix emit-lisp for id-form
-** add namespace or use empty package?
+* add custom error types read/emit-error with location
+** grep errors
 * add tests
 ** add check

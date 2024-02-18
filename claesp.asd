@@ -8,10 +8,11 @@
   :depends-on ()
   :serial t
   :components ((:file "claesp")
+	       (:file "claesp-user")
 	       (:file "utilities")
 	       (:file "location")
-	       (:file "value-type")
 	       (:file "value")
+	       (:file "types")
 	       (:file "deque")
 	       (:file "form")
 	       (:file "read")

@@ -5,13 +5,13 @@
        (not (member c '(#\newline #\tab #\space #\( #\) #\[ #\] #\:) :test #'char=))
        (graphic-char-p c)))
     
-(defun read-identifier (in out location)
+(defun read-id (in out location)
   (let ((c (read-char in nil)))
     (unless c
-      (return-from read-identifier))
+      (return-from read-id))
     (unread-char c in)
     (unless (id-char? c)
-      (return-from read-identifier)))
+      (return-from read-id)))
 
   (let* ((flocation (clone location))
 	 (s (with-output-to-string (s)
@@ -24,7 +24,7 @@
 		     (go next))
 		   (when c
                      (unread-char c in)))))))
-    (push-back out (new-id-form flocation (intern s :keyword)))
+    (push-back out (new-id-form flocation s))
     t))
 
 (defun read-digits (in location multiplier)
@@ -86,14 +86,47 @@
     (unless (char= c #\:)
       (unread-char c in)
       (return-from read-pair)))
+
+  (incf (column location))
   
   (unless (read-form in out location)
     (error "Syntax error"))
   
-  (let ((left (pop-front out))
-	(right (pop-front out)))
+  (let ((right (pop-back out))
+	(left (pop-back out)))
     (push-back out (new-pair-form (form-location left) left right)))
 
+  t)
+
+(defun read-vector (in out location)
+  (let ((c (read-char in nil)))
+    (unless c
+      (return-from read-vector))
+    (unless (char= c #\[)
+      (unread-char c in)
+      (return-from read-vector)))
+
+  (let ((flocation (clone location))
+	(items (new-deque)))
+    (incf (column location))
+    
+    (tagbody
+     next
+       (read-ws in out location)
+       
+       (let ((c (read-char in nil)))
+	 (unless c
+	   (error "Syntax error"))
+	 
+	 (unless (char= c #\])
+	   (unread-char c in)
+	   
+	   (unless (read-form in items location)
+	     (error "Syntax error"))
+
+	   (go next))))
+       
+    (push-back out (new-vector-form flocation items)))
   t)
 
 (defun read-ws (in out location)
@@ -116,7 +149,7 @@
   nil)
 
 (defun read-form (in out location)
-  (dolist (r (list #'read-ws #'read-number #'read-identifier #'read-pair))
+  (dolist (r (list #'read-ws #'read-number #'read-id #'read-pair #'read-vector))
     (when (funcall r in out location)
       (return-from read-form t)))
   nil)
