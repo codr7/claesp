@@ -1,4 +1,2 @@
-* add custom error types read/emit-error with location
-** grep errors
 * add tests
 ** add check

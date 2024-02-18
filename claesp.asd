@@ -11,6 +11,7 @@
 	       (:file "claesp-user")
 	       (:file "utilities")
 	       (:file "location")
+	       (:file "errors")
 	       (:file "value")
 	       (:file "types")
 	       (:file "deque")

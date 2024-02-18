@@ -90,7 +90,7 @@
   (incf (column location))
   
   (unless (read-form in out location)
-    (error "Syntax error"))
+    (syntax-error location "Missing right side of pair"))
   
   (let ((right (pop-back out))
 	(left (pop-back out)))
@@ -116,16 +116,17 @@
        
        (let ((c (read-char in nil)))
 	 (unless c
-	   (error "Syntax error"))
+	   (syntax-error location "Unexpected end of vector"))
 	 
 	 (unless (char= c #\])
 	   (unread-char c in)
 	   
 	   (unless (read-form in items location)
-	     (error "Syntax error"))
+	     (syntax-error location "Unexpected end of vector"))
 
 	   (go next))))
-       
+
+    (incf (column location))
     (push-back out (new-vector-form flocation items)))
   t)
 
