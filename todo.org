@@ -1,2 +1,11 @@
+* add deque type
+** <1 2 3>
+** add form
+** add reader
+** copy vector
 * add tests
 ** add check
+* add push/pop for vector/deque/pair
+** add sequence trait methods
+* add bench
+* add fib
