@@ -5,6 +5,8 @@
 ** copy vector
 * add tests
 ** add check
+* add set type
+** use rb
 * add push/pop for vector/deque/pair
 ** add sequence trait methods
 * add bench
