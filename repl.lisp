@@ -18,7 +18,7 @@
 						 (new-location "repl")))
                               (imp (compile-forms forms))
                               (result (funcall imp)))
-			 (say "~a~%" result))
+			 (say "~a~%" (if result result #\_)))
                      (ignore ()
                        :report "Ignore condition.")))
                  (write-string line buffer))

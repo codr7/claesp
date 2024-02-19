@@ -14,6 +14,7 @@
 	       (:file "errors")
 	       (:file "value")
 	       (:file "types")
+	       (:file "macro")
 	       (:file "deque")
 	       (:file "form")
 	       (:file "read")

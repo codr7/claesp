@@ -128,6 +128,45 @@
 
     (incf (column location))
     (push-back out (new-vector-form flocation items)))
+
+  t)
+
+(defun read-call (in out location)
+  (let ((c (read-char in nil)))
+    (unless c
+      (return-from read-call))
+    (unless (char= c #\()
+      (unread-char c in)
+      (return-from read-call)))
+
+  (let ((flocation (clone location))
+	target
+	(args (new-deque)))
+    (incf (column location))
+
+    (unless (read-form in out location)
+      (syntax-error location "Missing call target"))
+    
+    (setf target (pop-back out))
+    
+    (tagbody
+     next
+       (read-ws in out location)
+       
+       (let ((c (read-char in nil)))
+	 (unless c
+	   (syntax-error location "Unexpected end of call"))
+	 
+	 (unless (char= c #\))
+	   (unread-char c in)
+	   
+	   (unless (read-form in args location)
+	     (syntax-error location "Unexpected end of call"))
+
+	   (go next))))
+
+    (incf (column location))
+    (push-back out (new-call-form flocation target args)))
   t)
 
 (defun read-ws (in out location)
@@ -147,10 +186,11 @@
             (unread-char c in)
 	    (return-from read-ws)))
 	 (go next))))
+
   nil)
 
 (defun read-form (in out location)
-  (dolist (r (list #'read-ws #'read-number #'read-id #'read-pair #'read-vector))
+  (dolist (r (list #'read-ws #'read-number #'read-id #'read-call #'read-pair #'read-vector))
     (when (funcall r in out location)
       (return-from read-form t)))
   nil)

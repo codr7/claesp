@@ -13,7 +13,7 @@
   (print-object value out))
 
 (defmethod print-object ((type value-type) out)
-  (write-string (name type) out))
+  (format out "(Type ~a)" (macro-name macro)))
 
 (defstruct value
   (type (error "Missing type") :type value-type)

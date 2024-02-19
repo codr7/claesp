@@ -3,6 +3,31 @@
 (defstruct form
   (location (error "Missing location") :type location))
 
+(defstruct (call-form (:include form))
+  (target (error "Missing target") :type form)
+  (args (error "Missing args") :type deque))
+
+(defun new-call-form (location target args)
+  (make-call-form :location location :target target :args args))
+
+(defmethod print-object ((f call-form) out)
+  (format out "(~a" (call-form-target f))
+  (let ((i 0))
+    (do-deque (arg (call-form-args f))
+      (unless (zerop i)
+	(write-char #\space out))
+      (print-object arg out)
+      (incf i))
+  (write-char #\) out)))
+
+(defmethod emit-lisp ((f call-form) args out)
+  (let* ((id (id-form-name (call-form-target f)))
+	 (v (find-id id)))
+    (unless v
+      (compile-error (form-location f) "Unknown id: ~a" id))
+
+    (emit-call-lisp (value-data v) (call-form-args f) out)))
+
 (defstruct (id-form (:include form))
   (name (error "Missing name") :type string))
 
@@ -14,7 +39,7 @@
 
 (defmethod emit-lisp ((f id-form) args out)
   (let ((v (or (find-id (id-form-name f))
-	       (error "Unknown id: ~a" f))))
+	       (compile-error (form-location f) "Unknown id: ~a" f))))
     (emit-id-lisp v args out)))
 
 (defstruct (literal-form (:include form))

@@ -24,6 +24,23 @@
 (bind-id "T" true)
 (bind-id "F" false)
 
+(defclass macro-type (value-type)
+  ())
+
+(defvar macro-type (make-instance 'macro-type :name "Macro"))
+
+(defclass nil-type (value-type)
+  ())
+
+(defvar nil-type (make-instance 'nil-type :name "Nil"))
+
+(defmethod print-value ((type nil-type) value out)
+  (write-char #\_ out))
+
+(defvar _ (new-value nil-type nil))
+
+(bind-id "_" _)
+
 (defclass number-type (value-type)
   ())
 
