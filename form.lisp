@@ -26,7 +26,7 @@
     (unless v
       (compile-error (form-location f) "Unknown id: ~a" id))
 
-    (emit-call-lisp (value-data v) (call-form-args f) out)))
+    (emit-call-lisp v (call-form-args f) out)))
 
 (defstruct (id-form (:include form))
   (name (error "Missing name") :type string))

@@ -9,7 +9,6 @@
     (bind-id name (new-value macro-type macro))
     macro))
 
-          (emit-call-lisp v (call-form-args f) out)
 (defmethod emit-call-lisp ((macro macro) args out)
   (funcall (macro-body macro) args out))
 
