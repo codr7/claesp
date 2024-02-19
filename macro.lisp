@@ -15,16 +15,20 @@
 (defmethod print-object ((macro macro) out)
   (format out "(Macro ~a)" (macro-name macro)))
 
-(defvar check-macro (new-macro "check"
-			       (lambda (location args out)
-				 (let ((expected (emit-form (pop-front args)))
-				       (actual (emit-forms args)))
-				   (cons `(let ((expected (progn ,@expected))
-						(actual (progn ,@actual)))
-					    (unless (eq (compare expected actual)
-							:eq)
-					      (check-error ,location
-							   ',(first expected)
-							   ',(first actual))))
-					 out)))))
+(new-macro "check"
+	   (lambda (location args out)
+	     (let ((expected (emit-form (pop-front args)))
+		   (actual (emit-forms args)))
+	       (cons `(let ((expected (progn ,@expected))
+			    (actual (progn ,@actual)))
+			(unless (eq (compare expected actual)
+				    :eq)
+			  (check-error ,location
+				       ',(first expected)
+				       ',(first actual))))
+		     out))))
 
+(new-macro "load"
+	   (lambda (location args out)
+	     (cons `(eval-from (value-data ,(first (emit-form (first args)))))
+		   out)))

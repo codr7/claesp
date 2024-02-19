@@ -1,7 +1,7 @@
 (in-package claesp)
 
 (defstruct (location (:conc-name nil))
-	   (source (error "Missing source") :type string)
+	   (source (error "Missing source"))
 	   (line 1 :type integer)
 	   (column 0 :type integer))
 

@@ -1,7 +1,9 @@
 * add test suite
-*** add load macro
-**** add string reader
-***** add string type
+** add string reader
+*** add string type
+** add equal-values
+*** use instead of compare in check macroq
+(eval-from "test.clsp")
 * add deque type
 ** <1 2 3>
 ** add form
