@@ -26,7 +26,7 @@
     (unless v
       (compile-error (form-location f) "Unknown id: ~a" id))
 
-    (emit-call-lisp v (call-form-args f) out)))
+    (emit-call-lisp v (form-location f) (call-form-args f) out)))
 
 (defstruct (id-form (:include form))
   (name (error "Missing name") :type string))
@@ -100,7 +100,7 @@
 				  :initial-contents (list ,@items-lisp)))
 	  out)))
 
-(defun compile-forms (in)
+(defun emit-forms (in)
   (let (out)
     (tagbody
      next
@@ -108,10 +108,15 @@
 	 (when f
 	   (setf out (emit-lisp f in out))
 	   (go next))))
-    (setf out (nreverse out))
-    
-    (compile nil `(lambda ()
-                    (declare (optimize (debug ,(if debug-mode 3 0))
-                                       (speed ,(if debug-mode 0 3))
-                                       (safety ,(if debug-mode 0 3))))
-                    ,@out))))
+    (nreverse out)))
+
+(defun emit-form (in)
+  (emit-forms (new-deque in)))
+
+(defun compile-forms (in)
+  (let ((out (emit-forms in)))
+    (eval `(lambda ()
+             (declare (optimize (debug ,(if debug-mode 3 0))
+				(speed ,(if debug-mode 0 3))
+				(safety ,(if debug-mode 0 3))))
+	     ,@out))))

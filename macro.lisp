@@ -9,13 +9,22 @@
     (bind-id name (new-value macro-type macro))
     macro))
 
-(defmethod emit-call-lisp ((macro macro) args out)
-  (funcall (macro-body macro) args out))
+(defmethod emit-call-lisp ((macro macro) location args out)
+  (funcall (macro-body macro) location args out))
 
 (defmethod print-object ((macro macro) out)
   (format out "(Macro ~a)" (macro-name macro)))
 
 (defvar check-macro (new-macro "check"
-			       (lambda (args out)
+			       (lambda (location args out)
+				 (let ((expected (emit-form (pop-front args)))
+				       (actual (emit-forms args)))
+				   (cons `(let ((expected (progn ,@expected))
+						(actual (progn ,@actual)))
+					    (unless (eq (compare expected actual)
+							:eq)
+					      (check-error ,location
+							   ',(first expected)
+							   ',(first actual))))
+					 out)))))
 
-				 )))

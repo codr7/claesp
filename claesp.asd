@@ -7,7 +7,8 @@
   :licence "MIT"
   :depends-on ()
   :serial t
-  :components ((:file "claesp")
+  :components ((:file "sort")
+	       (:file "claesp")
 	       (:file "claesp-user")
 	       (:file "utilities")
 	       (:file "location")

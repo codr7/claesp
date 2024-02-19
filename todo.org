@@ -1,5 +1,4 @@
-* add tests
-** implement check macro
+* add test suite
 *** add load macro
 **** add string reader
 ***** add string type

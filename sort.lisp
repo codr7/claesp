@@ -40,7 +40,6 @@
   (declare (type symbol x y))
   (compare (symbol-name x) (symbol-name y)))
 
-
 (defmethod compare ((x vector) y)
     (dotimes (i (min (length x) (length y)))
       (ecase (compare (aref x i) (aref y i))

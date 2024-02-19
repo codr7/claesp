@@ -8,11 +8,17 @@
 	    :initform (error "Missing :message")
 	    :reader message)))
 
-(define-condition compile-error (location-error) ()
+(define-condition check-error (location-error) ()
   (:report (lambda (condition stream)
 	     (format stream
-		     "Compile error in ~a: ~a"
+		     "Check error in ~a: ~a"
 		     (location condition) (message condition)))))
+
+(defun check-error (location expected actual)
+  (error 'check-error
+	 :location location
+	 :message (format nil "Check failed: expected ~a, but was ~a"
+			  expected actual)))
 
 (defun compile-error (location spec &rest args)
   (error 'compile-error :location location :message (apply #'format nil spec args)))

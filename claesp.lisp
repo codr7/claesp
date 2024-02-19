@@ -1,5 +1,6 @@
 (defpackage claesp
   (:use cl)
+  (:import-from sort compare)
   (:export))
 
 (in-package claesp)
