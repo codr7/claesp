@@ -6,7 +6,9 @@
 (in-package claesp)
 
 (define-symbol-macro version
-  (slot-value (asdf:find-system 'claesp) 'asdf:version))
+    (multiple-value-bind (v)
+	(parse-integer (slot-value (asdf:find-system 'claesp) 'asdf:version))
+      v))
 
 (defvar debug-mode t)  
 
