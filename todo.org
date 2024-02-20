@@ -7,7 +7,6 @@
 ** use rb
 * add push/pop for vector/deque/pair
 ** add sequence trait methods
-* add bench
 * add fib
 
 (eval-from "test.clsp")

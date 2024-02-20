@@ -15,6 +15,23 @@
 (defmethod print-object ((macro macro) out)
   (format out "(Macro ~a)" (macro-name macro)))
 
+(new-macro "benchmark"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (let ((max (value-data (first (emit-form (pop-front args))))))
+	       (cons
+		`(let ((run-t (get-internal-run-time))
+		       (real-t (get-internal-real-time)))
+		   (dotimes (i ,max)
+		     (progn
+		       ,@(emit-forms args)))
+		   (new-value pair-type
+			      (cons (new-value number-type
+					       (- (get-internal-run-time) run-t))
+				    (new-value number-type
+					       (- (get-internal-real-time) real-t)))))
+		out))))
+
 (new-macro "check"
 	   (lambda (location args out)
 	     (let ((expected (emit-form (pop-front args)))
@@ -29,5 +46,6 @@
 
 (new-macro "load"
 	   (lambda (location args out)
+	     (declare (ignore location))
 	     (let ((path (first (emit-form (pop-front args)))))
 	       (cons `(eval-from (value-data ,path)) out))))
