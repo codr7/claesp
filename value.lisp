@@ -27,6 +27,9 @@
 (defmethod print-object ((type value-type) out)
   (format out "(Type ~a)" (name type)))
 
+(defmethod say-value ((type value-type) value out)
+  (print-value type value out))
+
 (defstruct value
   (type (error "Missing type") :type value-type)
   (data (error "Missing data")))
@@ -69,6 +72,9 @@
     
 (defmethod print-object ((value value) out)
   (print-value (value-type value) value out))
+
+(defmethod say ((value value) out)
+  (say-value (value-type value) value out))
 
 (defmethod equal-values? (x y)
   (equalp x y))

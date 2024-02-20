@@ -63,6 +63,9 @@
 (defmethod print-value ((type string-type) value out)
   (format out "\"~a\"" (value-data value)))
 
+(defmethod say-value ((type string-type) value out)
+  (write-string (value-data value) out))
+
 (defclass vector-type (value-type)
   ())
 

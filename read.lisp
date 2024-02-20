@@ -49,21 +49,16 @@
     (unless c
       (return-from read-number))
     (unread-char c in)
-    (unless (or (char= c #\-) (char= c #\.) (digit-char-p c))
+    (unless (or (char= c #\.) (digit-char-p c))
       (return-from read-number)))
   
   (let ((flocation (clone location))
-	(v 0)
-	negative)
+	(v 0))
     (tagbody
      next
        (let ((c (read-char in nil)))
 	 (when c
 	   (cond
-	     ((char= c #\-)
-	      (incf (column location))
-	      (setf negative t)
-	      (go next))
 	     ((char= c #\.)
 	      (incf (column location))
 	      (multiple-value-bind (dv dn) (read-digits in location 10)
@@ -74,9 +69,7 @@
 	      (go next))
 	     (t (unread-char c in))))))
     
-    (push-back out
-	       (new-literal-form flocation (new-value number-type
-						 (if negative (- v) v)))))
+    (push-back out (new-literal-form flocation (new-value number-type v))))
     
     t)
 
