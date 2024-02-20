@@ -27,9 +27,11 @@
 		       ,@(emit-forms args)))
 		   (new-value pair-type
 			      (cons (new-value number-type
-					       (- (get-internal-run-time) run-t))
+					       (/ (- (get-internal-run-time) run-t)
+						  internal-time-units-per-second))
 				    (new-value number-type
-					       (- (get-internal-real-time) real-t)))))
+					       (/ (- (get-internal-real-time) real-t)
+						  internal-time-units-per-second)))))
 		out))))
 
 (new-macro "check"
