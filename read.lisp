@@ -2,7 +2,8 @@
 
 (defun id-char? (c)
   (and c
-       (not (member c '(#\newline #\tab #\space #\( #\) #\[ #\] #\:) :test #'char=))
+       (not (member c '(#\newline #\tab #\space #\( #\) #\[ #\] #\: #\")
+		    :test #'char=))
        (graphic-char-p c)))
     
 (defun read-id (in out location)
@@ -98,6 +99,30 @@
 
   t)
 
+(defun read-string (in out location)
+  (let ((c (read-char in nil)))
+    (unless c
+      (return-from read-string))
+    (unless (char= c #\")
+      (unread-char c in)
+      (return-from read-string)))
+
+  (let ((flocation (clone location))
+	(s (with-output-to-string (s)
+             (tagbody
+              next
+		(incf (column location))
+                (let ((c (read-char in nil)))
+		  (unless c
+		    (syntax-error location "Unexpected end of string"))
+		  (unless (char= c #\")
+		    (write-char c s)
+		    (go next)))))))
+    (incf (column location))
+    (push-back out (new-literal-form flocation (new-value string-type s))))
+  
+  t)
+
 (defun read-vector (in out location)
   (let ((c (read-char in nil)))
     (unless c
@@ -179,7 +204,7 @@
          (case c
            (#\newline
             (incf (line location))
-            (setf (column location) 0))
+            (setf (column location) 1))
            ((#\space #\tab)
             (incf (column location)))
 	   (otherwise
@@ -190,7 +215,13 @@
   nil)
 
 (defun read-form (in out location)
-  (dolist (r (list #'read-ws #'read-number #'read-id #'read-call #'read-pair #'read-vector))
+  (dolist (r (list #'read-ws
+		   #'read-number
+		   #'read-id
+		   #'read-string
+		   #'read-call
+		   #'read-pair
+		   #'read-vector))
     (when (funcall r in out location)
       (return-from read-form t)))
   nil)

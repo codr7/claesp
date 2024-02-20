@@ -16,7 +16,7 @@
 (defvar bit-type (make-instance 'bit-type :name "Bit"))
 
 (defmethod print-value ((type bit-type) value out)
-  (write-char (if value #\T #\F) out))
+  (write-char (if (value-data value) #\T #\F) out))
 
 (defvar true (new-value bit-type t))
 (defvar false (new-value bit-type nil))
@@ -52,7 +52,16 @@
 (defvar pair-type (make-instance 'pair-type :name "Pair"))
 
 (defmethod print-value ((type pair-type) value out)
-  (format out "~a:~a" (first value) (rest value)))
+  (let ((d (value-data value)))
+    (format out "~a:~a" (first d) (rest d))))
+
+(defclass string-type (value-type)
+  ())
+
+(defvar string-type (make-instance 'string-type :name "String"))
+
+(defmethod print-value ((type string-type) value out)
+  (format out "\"~a\"" (value-data value)))
 
 (defclass vector-type (value-type)
   ())
@@ -60,10 +69,11 @@
 (defvar vector-type (make-instance 'vector-type :name "Vector"))
 
 (defmethod print-value ((type vector-type) value out)
-  (write-char #\[ out)
-  (dotimes (i (length value))
-    (unless (zerop i)
-      (write-char #\space out))
-    (print-object (aref value i) out))
-  (write-char #\] out))
+  (let ((v (value-data value)))
+    (write-char #\[ out)
+    (dotimes (i (length v))
+      (unless (zerop i)
+	(write-char #\space out))
+      (print-object (aref v i) out))
+    (write-char #\] out)))
 

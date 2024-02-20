@@ -19,7 +19,7 @@
   (compare (value-data x) (value-data y)))
 
 (defmethod print-value ((type value-type) value out)
-  (print-object value out))
+  (print-object (value-data value) out))
 
 (defmethod print-object ((type value-type) out)
   (format out "(Type ~a)" (name type)))
@@ -51,4 +51,4 @@
 	(compare (name xt) (name yt)))))
     
 (defmethod print-object ((value value) out)
-  (print-value (value-type value) (value-data value) out))
+  (print-value (value-type value) value out))

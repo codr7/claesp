@@ -21,4 +21,5 @@
 					 load-path))
 	     (forms (read-forms in (new-location p)))
              (imp (compile-forms forms)))
+	(format t "FORMS: ~a~%" forms)
         (funcall imp)))))
