@@ -21,8 +21,7 @@
 		   (actual (emit-forms args)))
 	       (cons `(let ((expected (progn ,@expected))
 			    (actual (progn ,@actual)))
-			(unless (eq (compare expected actual)
-				    :eq)
+			(unless (equal-values? expected actual)
 			  (check-error ,location
 				       ',(first expected)
 				       ',(first actual))))

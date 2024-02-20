@@ -12,6 +12,9 @@
 (defmethod emit-value-id-lisp ((type value-type) value args out)
   (emit-value-lisp type value args out))
 
+(defmethod value-equals? ((type value-type) x y)
+  (equal-values (value-data x) (value-data y)))
+
 (defmethod value-T? ((type value-type) value)
   (value-data value))
 
@@ -52,3 +55,18 @@
     
 (defmethod print-object ((value value) out)
   (print-value (value-type value) value out))
+
+(defmethod equal-values? (x y)
+  (equalp x y))
+
+(defmethod equal-values? ((x number) (y number))
+  (= x y))
+
+(defmethod equal-values? ((x string) (y string))
+  (string= x y))
+
+(defmethod equal-values? ((x value) (y value))
+  (let ((xt (value-type x))
+	(yt (value-type y)))
+    (when (eq xt yt)
+      (value-equals? xt x y))))

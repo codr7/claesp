@@ -1,5 +1,3 @@
-* add equal-values
-** use instead of compare in check macro
 * add deque type
 ** <1 2 3>
 ** add form
