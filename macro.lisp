@@ -31,5 +31,4 @@
 (new-macro "load"
 	   (lambda (location args out)
 	     (let ((path (first (emit-form (pop-front args)))))
-	       (format t "PATH: ~a~%" path)
 	       (cons `(eval-from (value-data ,path)) out))))
