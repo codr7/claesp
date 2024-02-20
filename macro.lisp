@@ -15,6 +15,12 @@
 (defmethod print-object ((macro macro) out)
   (format out "(Macro ~a)" (macro-name macro)))
 
+(new-macro "and"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(first (member-if-not #'T? (list ,@(emit-forms args))))
+		   out)))
+
 (new-macro "benchmark"
 	   (lambda (location args out)
 	     (declare (ignore location))
@@ -53,3 +59,9 @@
 	     (declare (ignore location))
 	     (let ((path (first (emit-form (pop-front args)))))
 	       (cons `(eval-from (value-data ,path)) out))))
+
+(new-macro "or"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(first (member-if #'T? (list ,@(emit-forms args))))
+		   out)))

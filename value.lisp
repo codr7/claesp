@@ -16,7 +16,7 @@
   (equal-values (value-data x) (value-data y)))
 
 (defmethod value-T? ((type value-type) value)
-  (value-data value))
+  (T? (value-data value)))
 
 (defmethod value-compare ((type value-type) x y)
   (compare (value-data x) (value-data y)))
@@ -45,6 +45,20 @@
 
 (defmethod T? ((value value))
   (value-T? (value-type value) value))
+
+(defmethod T? (value)
+  t)
+
+(defmethod T? ((value (eql 0)))
+  nil)
+
+(defmethod T? ((value (eql nil))))
+
+(defmethod T? ((value (eql t)))
+  t)
+
+(defmethod T? ((value string))
+  (not (string= value "")))
 
 (defmethod compare ((x value) (y value))
   (let ((xt (value-type x))
