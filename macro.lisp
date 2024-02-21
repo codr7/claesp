@@ -19,7 +19,7 @@
 	   (lambda (location args out)
 	     (declare (ignore location))
 	     (cons `(new-value bit-type
-			       (zerop ,(value-data (first (emit-forms args)))))
+			       (zerop (value-data ,(first (emit-forms args)))))
 		   out)))
 
 (new-macro "++"
