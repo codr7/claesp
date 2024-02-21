@@ -73,6 +73,12 @@
 				       ',(first actual))))
 		     out))))
 
+(new-macro "do"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(progn ,@(emit-forms args))
+		   out)))
+
 (new-macro "load"
 	   (lambda (location args out)
 	     (declare (ignore location))

@@ -1,8 +1,10 @@
 * add if macro
+** use T?
 * add +/- macros
 * add =/</> macros
 * add function macro
 ** emit defmethod in claesp-user
+** emit arguments as is
 * add deque type
 ** <1 2 3>
 ** add form
