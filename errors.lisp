@@ -20,6 +20,12 @@
 	 :message (format nil "Check failed: expected ~a, but was ~a"
 			  expected actual)))
 
+(define-condition compile-error (location-error) ()
+  (:report (lambda (condition stream)
+	     (format stream
+		     "Compile error in ~a: ~a"
+		     (location condition) (message condition)))))
+
 (defun compile-error (location spec &rest args)
   (error 'compile-error :location location :message (apply #'format nil spec args)))
 

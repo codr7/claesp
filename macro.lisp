@@ -15,6 +15,25 @@
 (defmethod print-object ((macro macro) out)
   (format out "(Macro ~a)" (macro-name macro)))
 
+(new-macro "=0"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value bit-type
+			       (zerop ,(value-data (first (emit-forms args)))))
+		   out)))
+
+(new-macro "++"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(incf (value-data ,(first (emit-forms args))))
+		   out)))
+
+(new-macro "--"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(decf (value-data ,(first (emit-forms args))))
+		   out)))
+
 (new-macro "and"
 	   (lambda (location args out)
 	     (declare (ignore location))

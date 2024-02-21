@@ -1,8 +1,8 @@
-* map zerop
-* map incf/decf
+* add if macro
 * add +/- macros
 * add =/</> macros
-* add if macro
+* add function macro
+** emit defmethod in claesp-user
 * add deque type
 ** <1 2 3>
 ** add form
