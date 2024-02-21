@@ -79,6 +79,14 @@
 	     (cons `(progn ,@(emit-forms args))
 		   out)))
 
+(new-macro "if"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(if (T? ,(first (emit-form (pop-front args))))
+			,(first (emit-form (pop-front args)))
+			,(first (emit-form (pop-front args))))
+		   out)))
+
 (new-macro "load"
 	   (lambda (location args out)
 	     (declare (ignore location))
