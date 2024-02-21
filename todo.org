@@ -1,4 +1,3 @@
-* add +/- macros
 * add =/</> macros
 * add function macro
 ** emit defmethod in claesp-user

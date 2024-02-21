@@ -34,6 +34,22 @@
 	     (cons `(decf (value-data ,(first (emit-forms args))))
 		   out)))
 
+(new-macro "+"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value number-type
+			       (apply #' + (mapcar #'value-data 
+						   (list ,@(emit-forms args)))))
+		   out)))
+
+(new-macro "-"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value number-type
+			       (apply #'- (mapcar #'value-data 
+						  (list ,@(emit-forms args)))))
+		   out)))
+
 (new-macro "and"
 	   (lambda (location args out)
 	     (declare (ignore location))
