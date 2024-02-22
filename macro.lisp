@@ -50,6 +50,34 @@
 						  (list ,@(emit-forms args)))))
 		   out)))
 
+(new-macro "<"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value bit-type
+			       (reduce (lambda (x y) 
+					 (format t "x ~a y ~a~%" x y)
+					 (not (eq (compare x y) :gt)))
+				       (list ,@(emit-forms args))))
+		   out)))
+
+(new-macro ">"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value bit-type
+			       (reduce (lambda (x y) 
+					 (not (eq (compare x y) :gt)))
+				       (list ,@(emit-forms args))))
+		   out)))
+
+(new-macro "="
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(new-value bit-type
+			       (reduce (lambda (x y) 
+					 (equal-values x y))
+				       (list ,@(emit-forms args))))
+		   out)))
+
 (new-macro "and"
 	   (lambda (location args out)
 	     (declare (ignore location))

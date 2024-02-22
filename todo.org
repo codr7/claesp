@@ -1,7 +1,8 @@
-* add =/</> macros
 * add function macro
 ** emit defmethod in claesp-user
 ** emit arguments as is
+* add seoarate pair struct
+** update form
 * add deque type
 ** <1 2 3>
 ** add form
