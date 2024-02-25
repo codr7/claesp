@@ -147,6 +147,16 @@
 	       (cons `(call ,(first args-lisp) ,location (list ,@(rest args-lisp)))
 		     out))))
 
+(new-macro "isa?"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(let ((xt (value-type (progn 
+					    ,@(emit-form (pop-front args)))))
+			  (yt (value-data (progn 
+					    ,@(emit-form (pop-front args))))))
+		      (new-value bit-type (subtypep (type-of xt) (type-of yt))))
+		   out)))
+
 (new-macro "check"
 	   (lambda (location args out)
 	     (let ((expected (emit-form (pop-front args)))

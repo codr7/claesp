@@ -43,3 +43,9 @@
 
 (check 42
   (call (^ [x] x) 42))
+
+(check T
+  (isa? 42 Number))
+
+(check F
+  (isa? "foo" Number))

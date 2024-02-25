@@ -1,6 +1,10 @@
 * add user-package var 'claesp-user
-** grep/replace
+** add user-package type
+*** parent-package, bindings
+*** add new-package
+** grep/replace intern
 ** add macro with-user-package (sym user-package '- id)
+** move/update bind/find-id
 * add seoarate pair struct
 ** update form
 ** grep pair-type
