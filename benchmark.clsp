@@ -1,4 +1,9 @@
 (^ fib [n]
-  (if (< n 2) n (+ (fib (- n 1)) (fib (- n 1)))))
+  (if (< n 2) n (+ (fib (- n 1)) (fib (- n 2)))))
 
 (say (benchmark 100 (fib 20)))
+
+(^ fib-tail [n a b]
+  (if (> n 1) (fib-tail (- n 1) b (+ a b)) (if (=0 n) a b)))
+
+(say (benchmark 10000 (fib-tail 70 0 1)))

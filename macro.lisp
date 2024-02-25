@@ -22,18 +22,6 @@
 			       (zerop (value-data ,(first (emit-forms args)))))
 		   out)))
 
-(new-macro "++"
-	   (lambda (location args out)
-	     (declare (ignore location))
-	     (cons `(incf (value-data ,(first (emit-forms args))))
-		   out)))
-
-(new-macro "--"
-	   (lambda (location args out)
-	     (declare (ignore location))
-	     (cons `(decf (value-data ,(first (emit-forms args))))
-		   out)))
-
 (new-macro "+"
 	   (lambda (location args out)
 	     (declare (ignore location))
@@ -57,8 +45,8 @@
 			       (if (and in (eq out :lt))
 				   (rec (first in) 
 					(rest in) 
-					(compare prev (first in))))
-				   out))
+					(compare prev (first in)))
+				   out)))
 		      (let ((in (list ,@(emit-forms args))))
 			(new-value bit-type (eq :lt (rec (first in) (rest in) :lt)))))
 		   out)))
@@ -68,10 +56,10 @@
 	     (declare (ignore location))
 	     (cons `(labels ((rec (prev in out)
 			       (if (and in (eq out :gt))
-					(rec (first in) 
-					     (rest in) 
-					     (compare prev (first in))))
-				   out))
+				   (rec (first in) 
+					(rest in) 
+					(compare prev (first in)))
+				   out)))
 		      (let ((in (list ,@(emit-forms args))))
 			(new-value bit-type (eq :gt (rec (first in) (rest in) :gt)))))
 		   out)))
@@ -150,7 +138,7 @@
 			      function-args))
 			,@(emit-forms args))
 		     out))))
-	   
+
 (new-macro "if"
 	   (lambda (location args out)
 	     (declare (ignore location))

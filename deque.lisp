@@ -12,7 +12,7 @@
     item))
 
 (defmethod print-object ((item deque-item) out)
-  (format out "~a<-~a->~a" (it (prev item)) (it item) (it (next item))))
+  (print-object (it item) out))
 
 (defun deque-item-append (head item)
   (let ((next (next head)))

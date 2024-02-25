@@ -1,6 +1,4 @@
-* -- in fib
-** disable debug mode
-* add lambda support
+* add lambda support to function macro
 ** add test
 ** add call macro
 * add seoarate pair struct
