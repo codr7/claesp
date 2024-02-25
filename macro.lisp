@@ -132,7 +132,7 @@
 	       (dolist (arg function-args)
 		 (let ((arg-id (id-form-name arg)))
 		   (bind-id arg-id (new-value variable-type arg-id))))
-	       (cons `(defmethod ,(intern id 'claesp-user) 
+	       (cons `(defun ,(intern id 'claesp-user) 
 			  (,@(mapcar (lambda (f)
 				       (intern (id-form-name f)))
 			      function-args))
