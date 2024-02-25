@@ -3,6 +3,9 @@
 (defclass value-type ()
   ((name :initarg :name :initform (error "Missing name") :reader name)))
 
+(defmethod call-value ((type value-type) target location args)
+  (call (value-data target) location args))
+
 (defmethod emit-value-lisp ((type value-type) value args out)
   (cons value out))
 
@@ -39,6 +42,9 @@
 
 (defun new-value (type data)
   (make-value :type type :data data))
+
+(defmethod call ((target value) location args)
+  (call-value (value-type target) target location args))
 
 (defmethod emit-lisp ((value value) args out)
   (emit-value-lisp (value-type value) value args out))

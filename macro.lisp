@@ -1,5 +1,13 @@
 (in-package claesp)
 
+(defclass macro-type (value-type)
+  ())
+
+(defvar macro-type (make-instance 'macro-type :name "Macro"))
+
+(defmethod lisp-value-type ((type macro-type))
+  'macro)
+
 (defstruct macro
   (name (error "Missing name") :type string)
   (body (error "Missing body") :type function))
@@ -75,6 +83,37 @@
 			(new-value bit-type (rec (first in) (rest in) t))))
 		   out)))
 
+(new-macro "^"
+	   (lambda (location args out)
+	     (let* ((id-form (pop-front args))
+		    (id? (eq (type-of id-form) 'id-form))
+		    (id (when id? (id-form-name id-form)))
+		    (lisp-id (intern (symbol-name (gensym (string-upcase id)))))
+		    (function-args-form (if id? (pop-front args) id-form))
+		    (function-args (vector-form-items function-args-form)))
+	       (when id?
+		 (bind-id id (new-value function-type 
+					(new-function id 
+						      lisp-id 
+						      location 
+						      function-args))))
+
+	       (let ((function-arg-lisp-ids nil))
+		 (do-deque (arg function-args)
+		   (let* ((arg-id (id-form-name arg))
+			  (lisp-id (intern (symbol-name (gensym (string-upcase arg-id))))))
+		     (bind-id arg-id (new-value variable-type lisp-id))
+		     (push lisp-id function-arg-lisp-ids)))
+
+		 (cons (if id?
+			   `(defun ,lisp-id 
+				(,@(nreverse function-arg-lisp-ids))
+			      ,@(emit-forms args))
+			   `(new-value lambda-type 
+				       (lambda (,@(nreverse function-arg-lisp-ids))
+					 ,@(emit-forms args))))
+		       out)))))
+
 (new-macro "and"
 	   (lambda (location args out)
 	     (declare (ignore location))
@@ -102,6 +141,12 @@
 						   internal-time-units-per-second))))))
 		out))))
 
+(new-macro "call"
+	   (lambda (location args out)
+	     (let ((args-lisp (emit-forms args)))
+	       (cons `(call ,(first args-lisp) ,location (list ,@(rest args-lisp)))
+		     out))))
+
 (new-macro "check"
 	   (lambda (location args out)
 	     (let ((expected (emit-form (pop-front args)))
@@ -110,8 +155,8 @@
 			    (actual (progn ,@actual)))
 			(unless (equal-values? expected actual)
 			  (check-error ,location
-				       ',(first expected)
-				       ',(first actual))))
+				       `,(progn ,@expected)
+				       `,(progn ,@actual))))
 		     out))))
 
 (new-macro "do"
@@ -119,25 +164,6 @@
 	     (declare (ignore location))
 	     (cons `(progn ,@(emit-forms args))
 		   out)))
-
-(new-macro "^"
-	   (lambda (location args out)
-	     (declare (ignore location))
-	     (let* ((id-form (pop-front args))
-		    (id (id-form-name id-form))
-		    (function-args-form (pop-front args))
-		    (function-args (deque-items 
-				    (vector-form-items function-args-form))))
-	       (bind-id id (new-value function-type id))
-	       (dolist (arg function-args)
-		 (let ((arg-id (id-form-name arg)))
-		   (bind-id arg-id (new-value variable-type arg-id))))
-	       (cons `(defun ,(intern id 'claesp-user) 
-			  (,@(mapcar (lambda (f)
-				       (intern (id-form-name f)))
-			      function-args))
-			,@(emit-forms args))
-		     out))))
 
 (new-macro "if"
 	   (lambda (location args out)

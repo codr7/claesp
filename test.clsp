@@ -40,3 +40,6 @@
 (check 42
   (^ foo [x] x)
   (foo 42))
+
+(check 42
+  (call (^ [x] x) 42))

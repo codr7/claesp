@@ -17,6 +17,7 @@
 	       (:file "value")
 	       (:file "types")
 	       (:file "macro")
+	       (:file "function")
 	       (:file "io")
 	       (:file "form")
 	       (:file "read")

@@ -1,6 +1,6 @@
-* add lambda support to function macro
-** add test
-** add call macro
+* add user-package var 'claesp-user
+** grep/replace
+** add macro with-user-package (sym user-package '- id)
 * add seoarate pair struct
 ** update form
 ** grep pair-type
@@ -10,22 +10,19 @@
 * add function type
 ** name args & location
 
-* implement tail recursive fib benchmark
-* add deque type
-** <1 2 3>
-** add form
-** add reader
-** copy vector
 * add set type
 ** use rb
 * implement lookup fib benchmark
 * add push/pop for vector/deque/pair
 ** add sequence trait methods
 * aoc
+* add deque type
+** <1 2 3>
+** add form
+** add reader
+** copy vector
 
 (eval-from "test.clsp")
 
-(^ fib[n]
-  (if (< n 2) n (+ (fib (-1 n)) (fib (-1 n)))))
-
-(say (benchmark 100 (fib 20)))
+0.235341:0.234662
+0.074523:0.074091
