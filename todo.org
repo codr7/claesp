@@ -1,6 +1,14 @@
+* -- in fib
+** disable debug mode
+* add lambda support
+** add test
+** add call macro
 * add seoarate pair struct
 ** update form
-* add tests
+** grep pair-type
+* add separate variable struct
+** name/location
+** grep variable type
 * add function type
 ** name args & location
 

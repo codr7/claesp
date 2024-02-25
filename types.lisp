@@ -8,12 +8,18 @@
   (let ((name (name self)))
     (bind-id (name self) (new-value (if (string= name "Meta") self meta-type) self))))
 
+(defmethod lisp-value-type ((type meta-type))
+  'value-type)
+
 (defvar meta-type (make-instance 'meta-type :name "Meta"))
 
 (defclass bit-type (value-type)
   ())
 
 (defvar bit-type (make-instance 'bit-type :name "Bit"))
+
+(defmethod lisp-value-type ((type meta-type))
+  'bit)
 
 (defmethod print-value ((type bit-type) value out)
   (write-char (if (value-data value) #\T #\F) out))
@@ -37,6 +43,9 @@
 (defmethod emit-value-lisp ((type function-type) value args out)
   (cons (intern (value-data value) 'claesp-user) out))
 
+(defmethod lisp-value-type ((type function-type))
+  'function)
+
 (defmethod print-value ((type function-type) value out)
   (format out "(Function ~a)" (value-data value)))
 
@@ -53,14 +62,20 @@
   (let ((macro (value-data value)))
     (funcall (macro-body macro) location args out)))
 
+(defmethod lisp-value-type ((type macro-type))
+  'macro)
+
 (defclass nil-type (value-type)
   ())
 
 (defvar nil-type (make-instance 'nil-type :name "Nil"))
 
+(defmethod lisp-value-type ((type nil-type))
+  'null)
+
 (defmethod print-value ((type nil-type) value out)
   (write-char #\_ out))
-
+´
 (defvar _ (new-value nil-type nil))
 
 (bind-id "_" _)
@@ -70,10 +85,16 @@
 
 (defvar number-type (make-instance 'number-type :name "Number"))
 
+(defmethod lisp-value-type ((type number-type))
+  'number)
+
 (defclass pair-type (value-type)
   ())
 
 (defvar pair-type (make-instance 'pair-type :name "Pair"))
+
+(defmethod lisp-value-type ((type pair-type))
+  'pair)
 
 (defmethod print-value ((type pair-type) value out)
   (let ((d (value-data value)))
@@ -83,6 +104,9 @@
   ())
 
 (defvar string-type (make-instance 'string-type :name "String"))
+
+(defmethod lisp-value-type ((type string-type))
+  'string)
 
 (defmethod print-value ((type string-type) value out)
   (format out "\"~a\"" (value-data value)))
@@ -94,6 +118,9 @@
   ())
 
 (defvar variable-type (make-instance 'variable-type :name "Variable"))
+
+(defmethod lisp-value-type ((type variable-type))
+  'variable)
 
 (defmethod emit-value-lisp ((type variable-type) value args out)
   (cons (intern (value-data value)) out))
@@ -108,6 +135,9 @@
   ())
 
 (defvar vector-type (make-instance 'vector-type :name "Vector"))
+
+(defmethod lisp-value-type ((type vector-type))
+  'vector)
 
 (defmethod print-value ((type vector-type) value out)
   (let ((v (value-data value)))

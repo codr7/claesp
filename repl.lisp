@@ -8,7 +8,7 @@
       (tagbody
        next 
          (say "  ")
-         (let ((line (read-lne in nil)))
+         (let ((line (read-line in nil)))
            (when line
              (if (string= line "")
                  (progn

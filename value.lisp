@@ -12,6 +12,9 @@
 (defmethod emit-value-id-lisp ((type value-type) value args out)
   (emit-value-lisp type value args out))
 
+(defmethod lisp-value-type ((type value-type))
+  t)
+
 (defmethod value-equals? ((type value-type) x y)
   (equal-values? (value-data x) (value-data y)))
 
@@ -90,3 +93,6 @@
 	(yt (value-type y)))
     (when (eq xt yt)
       (value-equals? xt x y))))
+
+(defmethod lisp-type (value)
+  (lisp-value-type (value-type value)))
