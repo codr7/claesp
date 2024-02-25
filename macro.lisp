@@ -53,28 +53,38 @@
 (new-macro "<"
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(new-value bit-type
-			       (reduce (lambda (x y) 
-					 (not (eq (compare x y) :gt)))
-				       (list ,@(emit-forms args))))
+	     (cons `(labels ((rec (prev in out)
+			       (if (and in (eq out :lt))
+				   (rec (first in) 
+					(rest in) 
+					(compare prev (first in))))
+				   out))
+		      (let ((in (list ,@(emit-forms args))))
+			(new-value bit-type (eq :lt (rec (first in) (rest in) :lt)))))
 		   out)))
 
 (new-macro ">"
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(new-value bit-type
-			       (reduce (lambda (x y) 
-					 (not (eq (compare x y) :gt)))
-				       (list ,@(emit-forms args))))
+	     (cons `(labels ((rec (prev in out)
+			       (if (and in (eq out :gt))
+					(rec (first in) 
+					     (rest in) 
+					     (compare prev (first in))))
+				   out))
+		      (let ((in (list ,@(emit-forms args))))
+			(new-value bit-type (eq :gt (rec (first in) (rest in) :gt)))))
 		   out)))
 
 (new-macro "="
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(new-value bit-type
-			       (reduce (lambda (x y) 
-					 (equal-values x y))
-				       (list ,@(emit-forms args))))
+	     (cons `(labels ((rec (prev in out)
+			       (if (and in out)
+				   (rec (first in) (rest in) (equal-values? prev (first in)))
+				   out)))
+		      (let ((in (list ,@(emit-forms args))))
+			(new-value bit-type (rec (first in) (rest in) t))))
 		   out)))
 
 (new-macro "and"

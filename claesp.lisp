@@ -10,7 +10,7 @@
 	(parse-integer (slot-value (asdf:find-system 'claesp) 'asdf:version))
       v))
 
-(defvar debug-mode t)  
+(defvar debug-mode nil)  
 
 (defvar load-path "")
 

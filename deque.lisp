@@ -71,7 +71,7 @@
 (defmethod print-object ((deque deque) out)
   (write-char #\< out)
   (let ((i 0))
-    (dolist (it (deque-items deque))
+    (do-deque (it deque)
       (unless (zerop i)
 	(write-char #\space out))
       (print-object it out)
@@ -81,19 +81,18 @@
 (defmacro do-deque ((item deque) &body body)
   (let (($head (gensym))
 	($prev (gensym))
-	($next (gensym))
-	($rec (gensym)))
+	($next (gensym)))
     `(let* ((,$head (head ,deque))
 	    (,$prev ,$head)
 	    (,item nil))
        (tagbody
-	  ,$rec
+	  rec
 	  (let ((,$next (next ,$prev)))
 	    (unless (eq ,$next ,$head)
 	      (setf ,item (it ,$next)
 		    ,$prev ,$next)
 	      ,@body
-	      (go ,$rec)))))))
+	      (go rec)))))))
 
 (defun run-deque-tests ()
   (let ((q (new-deque 1 2)))
