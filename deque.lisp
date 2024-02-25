@@ -64,17 +64,17 @@
 
 (defun deque-items (deque)
   (let ((result nil))
-    (do-deque (item deque)
-      (push item result))
+    (do-deque (it deque)
+      (push it result))
     (nreverse result)))
   
 (defmethod print-object ((deque deque) out)
   (write-char #\< out)
   (let ((i 0))
-    (dolist (item (deque-items deque))
+    (dolist (it (deque-items deque))
       (unless (zerop i)
 	(write-char #\space out))
-      (print-object item out)
+      (print-object it out)
       (incf i)))
   (write-char #\> out))
 
@@ -84,8 +84,8 @@
 	($next (gensym))
 	($rec (gensym)))
     `(let* ((,$head (head ,deque))
-	   (,$prev ,$head)
-	   (,item nil))
+	    (,$prev ,$head)
+	    (,item nil))
        (tagbody
 	  ,$rec
 	  (let ((,$next (next ,$prev)))

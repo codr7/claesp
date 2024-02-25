@@ -24,10 +24,34 @@
 (bind-id "T" true)
 (bind-id "F" false)
 
+(defclass function-type (value-type)
+  ())
+
+(defvar function-type (make-instance 'function-type :name "Function"))
+
+(defmethod emit-value-call-lisp ((type function-type) value location args out)
+  (cons `(,(first (emit-form value))
+	  ,@(emit-forms args))
+	out))
+
+(defmethod emit-value-lisp ((type function-type) value args out)
+  (cons (intern (value-data value) 'claesp-user) out))
+
+(defmethod print-value ((type function-type) value out)
+  (format out "(Function ~a)" (value-data value)))
+
+(defmethod say-value ((type function-type) value out)
+  (say (find-id (value-data value)) out))
+
 (defclass macro-type (value-type)
   ())
 
 (defvar macro-type (make-instance 'macro-type :name "Macro"))
+
+(defmethod emit-call-value-lisp ((type macro-type) value location args out)
+  (format t "macro-type emit-call-value-lisp ~a ~%" value)
+  (let ((macro (value-data value)))
+    (funcall (macro-body macro) location args out)))
 
 (defclass nil-type (value-type)
   ())
@@ -65,6 +89,20 @@
 
 (defmethod say-value ((type string-type) value out)
   (write-string (value-data value) out))
+
+(defclass variable-type (value-type)
+  ())
+
+(defvar variable-type (make-instance 'variable-type :name "Variable"))
+
+(defmethod emit-value-lisp ((type variable-type) value args out)
+  (cons (intern (value-data value)) out))
+
+(defmethod print-value ((type variable-type) value out)
+  (format out "(Variable ~a)" (value-data value)))
+
+(defmethod say-value ((type variable-type) value out)
+  (say (find-id (value-data value)) out))
 
 (defclass vector-type (value-type)
   ())

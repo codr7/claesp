@@ -13,7 +13,7 @@
   (emit-value-lisp type value args out))
 
 (defmethod value-equals? ((type value-type) x y)
-  (equal-values (value-data x) (value-data y)))
+  (equal-values? (value-data x) (value-data y)))
 
 (defmethod value-T? ((type value-type) value)
   (T? (value-data value)))

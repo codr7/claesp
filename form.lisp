@@ -22,7 +22,6 @@
 	 (v (find-id id)))
     (unless v
       (compile-error (form-location f) "Unknown id: ~a" id))
-
     (emit-call-lisp v (form-location f) (call-form-args f) out)))
 
 (defstruct (id-form (:include form))
@@ -84,11 +83,7 @@
   (write-char #\] out)))
 
 (defmethod emit-lisp ((f vector-form) args out)
-  (let* ((item-args (new-deque))
-	 (items-lisp (reduce (lambda (result item)
-			       (emit-lisp item item-args result))
-			     (nreverse (deque-items (vector-form-items f)))
-			     :initial-value nil))
+  (let* ((items-lisp (emit-forms (vector-form-items f)))
 	 (n (length items-lisp)))
     (cons `(new-value vector-type
 		      (make-array ,n
@@ -98,6 +93,8 @@
 	  out)))
 
 (defun emit-forms (in)
+  (format t "~a~%" in)
+  
   (let (out)
     (tagbody
      next
@@ -105,7 +102,10 @@
 	 (when f
 	   (setf out (emit-lisp f in out))
 	   (go next))))
-    (nreverse out)))
+
+    (setf out (nreverse out))
+    (format t "~a~%" out)
+    out))
 
 (defun emit-form (in)
   (emit-forms (new-deque in)))

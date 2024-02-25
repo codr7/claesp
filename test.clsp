@@ -18,3 +18,7 @@
 
 (check 2
   (if F 1 2))
+
+(check 42
+  (^ foo [x] x)
+  (foo 42))

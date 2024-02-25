@@ -5,7 +5,7 @@
   (body (error "Missing body") :type function))
 
 (defun new-macro (name body)
-  (let ((macro (make-macro :name "check" :body body)))
+  (let ((macro (make-macro :name name :body body)))
     (bind-id name (new-value macro-type macro))
     macro))
 
@@ -55,7 +55,6 @@
 	     (declare (ignore location))
 	     (cons `(new-value bit-type
 			       (reduce (lambda (x y) 
-					 (format t "x ~a y ~a~%" x y)
 					 (not (eq (compare x y) :gt)))
 				       (list ,@(emit-forms args))))
 		   out)))
@@ -123,6 +122,25 @@
 	     (cons `(progn ,@(emit-forms args))
 		   out)))
 
+(new-macro "^"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (let* ((id-form (pop-front args))
+		    (id (id-form-name id-form))
+		    (function-args-form (pop-front args))
+		    (function-args (deque-items 
+				    (vector-form-items function-args-form))))
+	       (bind-id id (new-value function-type id))
+	       (dolist (arg function-args)
+		 (let ((arg-id (id-form-name arg)))
+		   (bind-id arg-id (new-value variable-type arg-id))))
+	       (cons `(defmethod ,(intern id 'claesp-user) 
+			  (,@(mapcar (lambda (f)
+				       (intern (id-form-name f)))
+			      function-args))
+			,@(emit-forms args))
+		     out))))
+	   
 (new-macro "if"
 	   (lambda (location args out)
 	     (declare (ignore location))

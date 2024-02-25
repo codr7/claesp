@@ -1,8 +1,10 @@
-* add function macro
-** emit defmethod in claesp-user
-** emit arguments as is
 * add seoarate pair struct
 ** update form
+* add tests
+* add function type
+** name args & location
+
+* implement tail recursive fib benchmark
 * add deque type
 ** <1 2 3>
 ** add form
@@ -10,8 +12,14 @@
 ** copy vector
 * add set type
 ** use rb
+* implement lookup fib benchmark
 * add push/pop for vector/deque/pair
 ** add sequence trait methods
-* add fib
+* aoc
 
 (eval-from "test.clsp")
+
+(^ fib[n]
+  (if (< n 2) n (+ (fib (-1 n)) (fib (-1 n)))))
+
+(say (benchmark 100 (fib 20)))

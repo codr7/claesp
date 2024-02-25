@@ -6,9 +6,9 @@
            (finish-output out)))
     (let ((buffer (make-string-output-stream)))
       (tagbody
-       next
+       next 
          (say "  ")
-         (let ((line (read-line in nil)))
+         (let ((line (read-lne in nil)))
            (when line
              (if (string= line "")
                  (progn
@@ -16,8 +16,7 @@
                    (restart-case
                        (let* ((forms (read-forms (make-string-input-stream line)
 						 (new-location "repl")))
-                              (imp (compile-forms forms))
-                              (result (funcall imp)))
+                              (result (funcall (compile-lisp (emit-forms forms)))))
 			 (say "~a~%" (if result result #\_)))
                      (ignore ()
                        :report "Ignore condition.")))
