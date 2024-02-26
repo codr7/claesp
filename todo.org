@@ -11,14 +11,13 @@
 * add set type
 ** use rb
 * implement lookup fib benchmark
-* add push/pop for vector/deque/pair
-** add sequence trait methods
 * aoc
 * add deque type
 ** <1 2 3>
 ** add form
 ** add reader
 ** copy vector
+** add push/pop/peek for deque
 
 (eval-from "test.clsp")
 
