@@ -5,15 +5,9 @@
 ** grep/replace intern
 ** add macro with-user-package (sym user-package '- id)
 ** move/update bind/find-id
-* add seoarate pair struct
-** update form
-** grep pair-type
 * add separate variable struct
 ** name/location
 ** grep variable type
-* add function type
-** name args & location
-
 * add set type
 ** use rb
 * implement lookup fib benchmark

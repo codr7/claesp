@@ -53,7 +53,7 @@
 (defmethod lisp-value-type ((type number-type))
   'number)
 
-(defclass pair-type (value-type)
+(defclass pair-type (stack-trait value-type)
   ())
 
 (defvar pair-type (make-instance 'pair-type :name "Pair"))
@@ -61,9 +61,8 @@
 (defmethod lisp-value-type ((type pair-type))
   'pair)
 
-(defmethod print-value ((type pair-type) value out)
-  (let ((d (value-data value)))
-    (format out "~a:~a" (first d) (rest d))))
+(defmethod value-push ((type pair-type) value it)
+  (new-value pair-type (push-value (value-data value) it)))
 
 (defclass string-type (value-type)
   ())
@@ -96,7 +95,7 @@
 (defmethod say-value ((type variable-type) value out)
   (say (find-id (value-data value)) out))
 
-(defclass vector-type (value-type)
+(defclass vector-type (stack-trait value-type)
   ())
 
 (defvar vector-type (make-instance 'vector-type :name "Vector"))
@@ -113,3 +112,5 @@
       (print-object (aref v i) out))
     (write-char #\] out)))
 
+(defmethod value-push ((type vector-type) value it)
+  (new-value vector-type (push-value (value-data value) it)))

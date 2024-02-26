@@ -3,37 +3,37 @@
 (defclass value-type ()
   ((name :initarg :name :initform (error "Missing name") :reader name)))
 
-(defmethod call-value ((type value-type) target location args)
+(defmethod call-value (type target location args)
   (call (value-data target) location args))
 
-(defmethod emit-value-lisp ((type value-type) value args out)
+(defmethod emit-value-lisp (type value args out)
   (cons value out))
 
-(defmethod emit-value-call-lisp ((type value-type) value location args out)
+(defmethod emit-value-call-lisp (type value location args out)
   (emit-call-lisp (value-data value) location args out))
 
-(defmethod emit-value-id-lisp ((type value-type) value args out)
+(defmethod emit-value-id-lisp (type value args out)
   (emit-value-lisp type value args out))
 
 (defmethod lisp-value-type ((type value-type))
   t)
 
-(defmethod value-equals? ((type value-type) x y)
+(defmethod value-equals? (type x y)
   (equal-values? (value-data x) (value-data y)))
 
-(defmethod value-T? ((type value-type) value)
+(defmethod value-T? (type value)
   (T? (value-data value)))
 
-(defmethod value-compare ((type value-type) x y)
+(defmethod value-compare (type x y)
   (compare (value-data x) (value-data y)))
 
-(defmethod print-value ((type value-type) value out)
+(defmethod print-value (type value out)
   (print-object (value-data value) out))
 
 (defmethod print-object ((type value-type) out)
   (format out "(Type ~a)" (name type)))
 
-(defmethod say-value ((type value-type) value out)
+(defmethod say-value (type value out)
   (print-value type value out))
 
 (defstruct value

@@ -62,8 +62,8 @@
 
 (defmethod emit-lisp ((f pair-form) args out)
   (cons `(new-value pair-type
-		    (cons ,(first (emit-lisp (pair-form-left f) args nil))
-			  ,(first (emit-lisp (pair-form-right f) args nil))))
+		    (new-pair ,(first (emit-lisp (pair-form-left f) args nil))
+			      ,(first (emit-lisp (pair-form-right f) args nil))))
 	out))
 
 (defstruct (vector-form (:include form))
@@ -80,7 +80,7 @@
 	(write-char #\space out))
       (print-object item out)
       (incf i))
-  (write-char #\] out)))
+    (write-char #\] out)))
 
 (defmethod emit-lisp ((f vector-form) args out)
   (let* ((items-lisp (emit-forms (vector-form-items f)))

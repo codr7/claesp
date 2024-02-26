@@ -78,6 +78,12 @@
       (incf i)))
   (write-char #\> out))
 
+(defmethod push-value ((deque deque) it)
+  (push-back deque it))
+
+(defmethod pop-value ((deque deque))
+  (pop-back deque))
+
 (defmacro do-deque ((item deque) &body body)
   (let (($head (gensym))
 	($prev (gensym))

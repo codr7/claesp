@@ -216,6 +216,7 @@
 		   #'read-pair
 		   #'read-vector))
     (when (funcall r in out location)
+      (read-pair in out location)
       (return-from read-form t)))
   nil)
 

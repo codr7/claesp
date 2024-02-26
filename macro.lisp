@@ -117,8 +117,7 @@
 (new-macro "and"
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(first (member-if-not #'T? (list ,@(emit-forms args))))
-		   out)))
+	     (cons `(first (member-if-not #'T? (list ,@(emit-forms args)))) out)))
 
 (new-macro "benchmark"
 	   (lambda (location args out)
@@ -131,14 +130,14 @@
 		     (progn
 		       ,@(emit-forms args)))
 		   (new-value pair-type
-			      (cons (new-value number-type
-					       (float
-						(/ (- (get-internal-run-time) run-t)
-						   internal-time-units-per-second)))
-				    (new-value number-type
-					       (float
-						(/ (- (get-internal-real-time) real-t)
-						   internal-time-units-per-second))))))
+			      (new-pair (new-value number-type
+						   (float
+						    (/ (- (get-internal-run-time) run-t)
+						       internal-time-units-per-second)))
+					(new-value number-type
+						   (float
+						    (/ (- (get-internal-real-time) real-t)
+						       internal-time-units-per-second))))))
 		out))))
 
 (new-macro "call"
@@ -172,8 +171,7 @@
 (new-macro "do"
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(progn ,@(emit-forms args))
-		   out)))
+	     (cons `(progn ,@(emit-forms args)) out)))
 
 (new-macro "if"
 	   (lambda (location args out)
@@ -192,5 +190,4 @@
 (new-macro "or"
 	   (lambda (location args out)
 	     (declare (ignore location))
-	     (cons `(first (member-if #'T? (list ,@(emit-forms args))))
-		   out)))
+	     (cons `(first (member-if #'T? (list ,@(emit-forms args)))) out)))
