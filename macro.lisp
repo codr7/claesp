@@ -119,6 +119,15 @@
 	     (declare (ignore location))
 	     (cons `(first (member-if-not #'T? (list ,@(emit-forms args)))) out)))
 
+(new-macro "backup"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(save-lisp-and-die 
+		     (value-data ,(first (emit-form (pop-front args))))
+                     :toplevel #'repl
+                     :executable t)
+		   out)))
+
 (new-macro "benchmark"
 	   (lambda (location args out)
 	     (declare (ignore location))
@@ -146,16 +155,6 @@
 	       (cons `(call ,(first args-lisp) ,location (list ,@(rest args-lisp)))
 		     out))))
 
-(new-macro "isa?"
-	   (lambda (location args out)
-	     (declare (ignore location))
-	     (cons `(let ((xt (value-type (progn 
-					    ,@(emit-form (pop-front args)))))
-			  (yt (value-data (progn 
-					    ,@(emit-form (pop-front args))))))
-		      (new-value bit-type (subtypep (type-of xt) (type-of yt))))
-		   out)))
-
 (new-macro "check"
 	   (lambda (location args out)
 	     (let ((expected (emit-form (pop-front args)))
@@ -179,6 +178,16 @@
 	     (cons `(if (T? ,(first (emit-form (pop-front args))))
 			,(first (emit-form (pop-front args)))
 			,(first (emit-form (pop-front args))))
+		   out)))
+
+(new-macro "isa?"
+	   (lambda (location args out)
+	     (declare (ignore location))
+	     (cons `(let ((xt (value-type (progn 
+					    ,@(emit-form (pop-front args)))))
+			  (yt (value-data (progn 
+					    ,@(emit-form (pop-front args))))))
+		      (new-value bit-type (subtypep (type-of xt) (type-of yt))))
 		   out)))
 
 (new-macro "load"

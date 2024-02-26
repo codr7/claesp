@@ -1,6 +1,7 @@
 (defpackage claesp
   (:use cl)
   (:import-from sort compare)
+  (:import-from sb-ext save-lisp-and-die)
   (:export))
 
 (in-package claesp)
