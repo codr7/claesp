@@ -1,9 +1,4 @@
-(^ fib-rec [n]
-  (if (< n 2) n (+ (fib-rec (- n 1)) (fib-rec (- n 2)))))
+(load "fib.clsp")
 
 (say (benchmark 100 (fib-rec 20)))
-
-(^ fib-tail [n a b]
-  (if (> n 1) (fib-tail (- n 1) b (+ a b)) (if (=0 n) a b)))
-
 (say (benchmark 10000 (fib-tail 70 0 1)))
