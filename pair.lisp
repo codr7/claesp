@@ -17,4 +17,4 @@
   (new-pair it (new-value pair-type pair)))
 
 (defmethod pop-value ((pair pair))
-  (values (left pair) (right pair)))
+  (right pair))

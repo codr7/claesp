@@ -51,10 +51,10 @@
   (isa? "foo" Number))
 
 (check 1
-  (pop 1:2))
+  (peek 1:2:3))
 
-(check 1
-  (peek 1:2))
+(check 2:3
+  (pop 1:2:3))
 
 (check 1:2:3
   (push 2:3 1))
